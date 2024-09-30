@@ -3,67 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherche d'articles</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .results {
-            margin-top: 20px;
-        }
-        .results table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .results table, .results th, .results td {
-            border: 1px solid #ddd;
-        }
-        .results th, .results td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+    <title>Recherche Articles</title>
+    <script src="recherche_relais.js" defer></script>
 </head>
 <body>
-    <h1>Recherche d'articles</h1>
+    <h1>Recherche dans les Articles</h1>
+    
     <form id="searchForm">
-        <div class="form-group">
-            <label for="auteurs">Auteurs</label>
-            <input type="text" id="auteurs" name="auteurs" list="auteursList">
-            <datalist id="auteursList"></datalist>
-        </div>
-        <div class="form-group">
-            <label for="annee">Année</label>
-            <select id="annee" name="annee">
-                <option value="">Sélectionnez une année</option>
-                <!-- Les années seront ajoutées dynamiquement par JavaScript -->
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="libelle">recherche sur le titre des articles</label>
-            <input type="text" id="libelle" name="libelle">
-        </div>
-        <div class="form-group">
-            <label for="motsCles">recherche par Mots-clés</label>
-            <input type="text" id="motsCles" name="motsCles">
-        </div>
-        <button type="button" onclick="searchArticles()">Rechercher</button>
+        <label for="keywords">Mots clés :</label>
+        <select id="keywords" name="keywords">
+            <!-- Les mots-clés seront insérés ici dynamiquement -->
+        </select>
+        <button type="submit">Rechercher</button>
     </form>
-    <div class="results" id="results"></div>
 
-    <script src="recherche_relais.js"></script>
+    <div id="resultats">
+        <!-- Les résultats de la recherche s'afficheront ici -->
+    </div>
+
+    <script>
+    // Récupérer les mots clés depuis le serveur
+    fetch('get_keywords.php')
+        .then(response => response.json())
+        .then(keywords => {
+            const keywordsSelect = document.getElementById('keywords');
+            keywords.forEach(keyword => {
+                const option = document.createElement('option');
+                option.value = keyword;
+                option.text = keyword;
+                keywordsSelect.add(option);
+            });
+        })
+        .catch(error => console.error('Erreur lors du chargement des mots-clés:', error));
+    </script>
 </body>
 </html>
